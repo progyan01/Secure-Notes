@@ -9,7 +9,7 @@ typedef struct{
     char password[MAX_PASSWORD_LEN];
 } User;
 
-void registerUser(User* all_users, int* user_count);
-User* loginUser(User* all_users, int user_count);
+void registerUser(User*, int*);
+User* loginUser(User*, int);
 
 #endif
