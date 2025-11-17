@@ -39,14 +39,14 @@ static int passwordValidity(const char* password){
     return 5;
 }
 
-static void getCredentials(char* username, char* password){
+static int getCredentials(char* username, char* password){
     printf("Enter your username: ");
     if(fgets(username, MAX_USERNAME_LEN, stdin)!=NULL){
         username[strcspn(username,"\n")]='\0';
     }
     else{
         printf("Error reading input. Try again.\n");
-        return;
+        return 0;
     }
 
     printf("Enter your password: ");
@@ -55,17 +55,21 @@ static void getCredentials(char* username, char* password){
     }
     else{
         printf("Error reading password. Try again.");
-        return;
+        return 0;
     }
+
+    return 1;
 }
 
 void registerUser(User* all_users, int* user_count){
     char new_username[MAX_USERNAME_LEN];
     char new_password[MAX_PASSWORD_LEN];
 
-    getCredentials(new_username,new_password);
+    if (getCredentials(new_username,new_password)==0){
+        return;
+    }
 
-    for(int i=0;i<user_count;i++){
+    for(int i=0;i<*user_count;i++){
         if(strcmp(new_username,all_users[i].username)==0){
             printf("Username already taken.\n");
             return;
