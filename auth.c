@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "crypto.h"
 
 static int passwordValidity(const char* password){
     int length=strlen(password);
@@ -110,6 +109,8 @@ User* loginUser(User* all_users, int user_count){
     getCredentials(username,password);
 
     //TO-DO: Encrypt/Hash this password the user has entered after we create the crypto.c
+
+    //testing
 
     for(int i=0;i<user_count;i++){
         if(strcmp(username,all_users[i].username)==0){
