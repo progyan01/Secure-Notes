@@ -13,6 +13,11 @@ typedef struct{
 } Note;
 
 void createNote(Note* all_notes, int* note_count, User* currentUser);
-void viewNotes(Note* all_notes, int note_count, User* currentUser);
+
+void listNotes(Note* all_notes, int note_count, User* currentUser);
+
+void readNote(Note* all_notes, int note_index, User* currentUser);
+
+void modifyNote(Note* all_notes, int note_index, User* currentUser);
 
 #endif
