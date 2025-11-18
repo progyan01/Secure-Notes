@@ -66,3 +66,25 @@ void readNote(Note* all_notes, int note_index, int note_count, User* currentUser
     printf("%s\n",all_notes[note_index].content);
     printf("-----------------------\n");
 }
+
+void modifyNote(Note* all_notes, int note_index, int note_count, User* currentUser){
+    if(note_index<0 || note_index>=note_count){ 
+        printf("Invalid Note ID.\n");
+        return;
+    }
+    if(strcmp(currentUser->username,all_notes[note_index].owner)!=0){
+        printf("You do not own this note.\n");
+        return;
+    }
+
+    printf("Current Title: %s\n", all_notes[note_index].title);
+    printf("Current Content:\n %s\n", all_notes[note_index].content);
+
+    if(fgets(all_notes[note_index].content,MAX_NOTE_CONTENT, stdin) != NULL) {
+        all_notes[note_index].content[strcspn(all_notes[note_index].content, "\n")]='\0';
+        printf("Note updated successfully!\n");
+    }
+    else{
+        printf("Error reading input.\n");
+    }
+}
