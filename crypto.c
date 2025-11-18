@@ -9,6 +9,7 @@ static char encrypt_char(char plain, char key_char) {
         return ((plain - 'a') + (tolower(key_char) - 'a')) % 26 + 'a';
     }
     return plain;
+}
 static char decrypt_char(char cipher, char key_char) {
     if (isupper(cipher)) {
         return ((cipher - 'A') - (toupper(key_char) - 'A') + 26) % 26 + 'A';
