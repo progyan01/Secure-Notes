@@ -1,6 +1,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "crypto.h"
+
 static char encrypt_char(char plain, char key_char) {
     if (isupper(plain)) {
         return ((plain - 'A') + (toupper(key_char) - 'A')) % 26 + 'A';
