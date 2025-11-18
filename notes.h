@@ -16,7 +16,7 @@ void createNote(Note* all_notes, int* note_count, User* currentUser);
 
 void listNotes(Note* all_notes, int note_count, User* currentUser);
 
-void readNote(Note* all_notes, int note_index, User* currentUser);
+void readNote(Note* all_notes, int note_index, int note_count, User* currentUser);
 
 void modifyNote(Note* all_notes, int note_index, User* currentUser);
 
