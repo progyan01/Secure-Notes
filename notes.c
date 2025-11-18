@@ -51,3 +51,18 @@ void listNotes(Note* all_notes, int note_count, User* currentUser){
     }
     printf("------------------\n");
 }
+
+void readNote(Note* all_notes, int note_index, int note_count, User* currentUser){
+    if(note_index<0 || note_index>=note_count) { 
+        printf("Invalid Note ID.\n");
+        return;
+    }
+    if(strcmp(currentUser->username,all_notes[note_index].owner)!=0){
+        printf("You do not own this note.\n");
+        return;
+    }
+
+    printf("----- %s -----\n",all_notes[note_index].title);
+    printf("%s\n",all_notes[note_index].content);
+    printf("-----------------------\n");
+}
