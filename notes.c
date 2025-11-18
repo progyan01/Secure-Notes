@@ -33,3 +33,21 @@ void createNote(Note* all_notes, int* note_count, User* currentUser){
     (*note_count)++;
     printf("Note created successfully!");
 }
+
+void listNotes(Note* all_notes, int note_count, User* currentUser){
+    char *username=currentUser->username;
+    int found=0;
+    printf("\n----- %s's Notes -----\n", username);
+
+    for(int i=0;i<note_count;i++){
+        if(strcmp(all_notes[i].owner,username)==0){
+            printf("[%d]. %s\n", i, all_notes[i].title);
+            found=1;
+        }
+    }
+
+    if(found==0){
+        printf("No note found.\n");
+    }
+    printf("------------------\n");
+}
