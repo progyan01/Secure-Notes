@@ -32,6 +32,7 @@ void createNote(Note* all_notes, int* note_count, User* currentUser){
         if(new_note->content != NULL){
             vigenere_encrypt(tempBuffer, currentUser->password, new_note->content);
 
+            new_note->created_at = time(NULL);
             (*note_count)++;
             printf("Note created successfully!");
         } 
@@ -77,8 +78,12 @@ void readNote(Note* all_notes, int note_index, int note_count, User* currentUser
         
         printf("----- %s -----\n", all_notes[note_index].title);
         printf("%s\n", plainText);
+        char *time_str = ctime(&all_notes[note_index].created_at);
+        time_str[strcspn(time_str, "\n")] = 0; 
+        printf("Created: %s\n", time_str);
         printf("-----------------------\n");
         
+        memset(plainText, 0, strlen(plainText));
         free(plainText);
     }
 }
@@ -98,6 +103,8 @@ void modifyNote(Note* all_notes, int note_index, int note_count, User* currentUs
     if(plainText){
         vigenere_decrypt(all_notes[note_index].content, currentUser->password, plainText);
         printf("Current Content: %s\n", plainText);
+
+        memset(plainText, 0, strlen(plainText));
         free(plainText);
     }
 
@@ -131,6 +138,36 @@ void deleteNote(Note* all_notes, int note_index, int* note_count, User* currentU
     }
     (*note_count)--;
     printf("Note deleted successfully.\n");
+}
+
+void searchNotes(Note* all_notes, int note_count, User* currentUser, char* query) {
+    printf("\n--- Search Results for '%s' ---\n", query);
+    int found = 0;
+
+    for(int i = 0; i < note_count; i++){
+        if (strcmp(all_notes[i].owner, currentUser->username) != 0) continue;
+
+        char *plainText = (char*)malloc(strlen(all_notes[i].content) + 1);
+        if(plainText){
+            vigenere_decrypt(all_notes[i].content, currentUser->password, plainText);
+
+            if (strstr(all_notes[i].title, query) != NULL || 
+                strstr(plainText, query) != NULL) {
+                
+                printf("[%d] %s (Found in: %s)\n", i, all_notes[i].title, 
+                       (strstr(all_notes[i].title, query)) ? "Title" : "Content");
+                found = 1;
+            }
+            
+            memset(plainText, 0, strlen(plainText));
+            free(plainText);
+        }
+    }
+
+    if (!found){
+        printf("No matches found.\n");
+    } 
+    printf("------------------------------\n");
 }
 
 void freeNotes(Note* all_notes, int note_count){
