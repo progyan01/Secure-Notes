@@ -1,4 +1,5 @@
 #include "auth.h"
+#include "crypto.h"
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -96,11 +97,12 @@ void registerUser(User* all_users, int* user_count){
         }
     }
 
-    //TO-DO: Encrypt/Hash this password the user has entered after we create the crypto.c
+    char encrypted_pass[MAX_PASSWORD_LEN];
+    vigenere_encrypt(new_password, SYSTEM_KEY, encrypted_pass);
 
     User* new_user=&all_users[*user_count];
     strcpy(new_user->username,new_username);
-    strcpy(new_user->password,new_password);
+    strcpy(new_user->password,encrypted_pass);
 
     (*user_count)++;
     printf("Registration successful!\n");
@@ -112,13 +114,12 @@ User* loginUser(User* all_users, int user_count){
 
     getCredentials(username,password);
 
-    //TO-DO: Encrypt/Hash this password the user has entered after we create the crypto.c
-
-    //testing
+    char encrypted_pass[MAX_PASSWORD_LEN];
+    vigenere_encrypt(password,SYSTEM_KEY,encrypted_pass);
 
     for(int i=0;i<user_count;i++){
         if(strcmp(username,all_users[i].username)==0){
-            if(strcmp(password,all_users[i].password)==0){
+            if(strcmp(encrypted_pass,all_users[i].password)==0){
                 return &all_users[i];
             }
         }
