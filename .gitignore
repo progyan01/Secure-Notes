@@ -57,5 +57,6 @@ dkms.conf
 # Project-specific data files
 *.dat
 
-# VS Code folder
+# Project files
 .vscode/
+notes_app
