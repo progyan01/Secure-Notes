@@ -3,6 +3,7 @@
 
 #define MAX_USERNAME_LEN 50
 #define MAX_PASSWORD_LEN 50
+#define MAX_USERS 100
 
 typedef struct{
     char username[MAX_USERNAME_LEN];
