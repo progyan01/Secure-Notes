@@ -2,6 +2,7 @@
 #include <string.h>
 #include "notes.h"
 #include "auth.h"
+#include "crypto.h"
 
 void createNote(Note* all_notes, int* note_count, User* currentUser){
     if(*note_count>=MAX_NOTES){
@@ -23,22 +24,22 @@ void createNote(Note* all_notes, int* note_count, User* currentUser){
 
     printf("Enter your note: \n");
     char tempBuffer[MAX_NOTE_CONTENT]; 
-    if (fgets(tempBuffer, MAX_NOTE_CONTENT, stdin) != NULL) {
+    if (fgets(tempBuffer, MAX_NOTE_CONTENT, stdin) != NULL){
         tempBuffer[strcspn(tempBuffer, "\n")] = '\0';
         
         new_note->content = (char*)malloc(strlen(tempBuffer) + 1);
         
-        if (new_note->content != NULL) {
-            strcpy(new_note->content, tempBuffer);
+        if(new_note->content != NULL){
+            vigenere_encrypt(tempBuffer, currentUser->password, new_note->content);
+
+            (*note_count)++;
+            printf("Note created successfully!");
         } 
-        else {
+        else{
             printf("Memory allocation failed!\n");
             return;
         }
     }
-
-    (*note_count)++;
-    printf("Note created successfully!");
 }
 
 void listNotes(Note* all_notes, int note_count, User* currentUser){
@@ -69,9 +70,17 @@ void readNote(Note* all_notes, int note_index, int note_count, User* currentUser
         return;
     }
 
-    printf("----- %s -----\n",all_notes[note_index].title);
-    printf("%s\n",all_notes[note_index].content);
-    printf("-----------------------\n");
+    char *plainText=(char*)malloc(strlen(all_notes[note_index].content) + 1);
+
+    if(plainText){
+        vigenere_decrypt(all_notes[note_index].content, currentUser->password, plainText);
+        
+        printf("----- %s -----\n", all_notes[note_index].title);
+        printf("%s\n", plainText);
+        printf("-----------------------\n");
+        
+        free(plainText);
+    }
 }
 
 void modifyNote(Note* all_notes, int note_index, int note_count, User* currentUser){
@@ -85,7 +94,12 @@ void modifyNote(Note* all_notes, int note_index, int note_count, User* currentUs
     }
 
     printf("Current Title: %s\n", all_notes[note_index].title);
-    printf("Current Content:\n %s\n", all_notes[note_index].content);
+    char *plainText = (char*)malloc(strlen(all_notes[note_index].content) + 1);
+    if(plainText){
+        vigenere_decrypt(all_notes[note_index].content, currentUser->password, plainText);
+        printf("Current Content: %s\n", plainText);
+        free(plainText);
+    }
 
     printf("Enter new content: ");
     char tempBuffer[MAX_NOTE_CONTENT];
@@ -95,7 +109,7 @@ void modifyNote(Note* all_notes, int note_index, int note_count, User* currentUs
         free(all_notes[note_index].content);
 
         all_notes[note_index].content = (char*)malloc(strlen(tempBuffer) + 1);
-        strcpy(all_notes[note_index].content, tempBuffer);
+        vigenere_encrypt(tempBuffer, currentUser->password, all_notes[note_index].content);
         
         printf("Note updated successfully!\n");
     }
