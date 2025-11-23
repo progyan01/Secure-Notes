@@ -22,12 +22,19 @@ void createNote(Note* all_notes, int* note_count, User* currentUser){
     }
 
     printf("Enter your note: \n");
-    if(fgets(new_note->content,MAX_NOTE_CONTENT,stdin)!=NULL){
-        new_note->content[strcspn(new_note->content,"\n")]='\0';
-    }
-    else{
-        printf("Error reading input. Try again.\n");
-        return;
+    char tempBuffer[MAX_NOTE_CONTENT]; 
+    if (fgets(tempBuffer, MAX_NOTE_CONTENT, stdin) != NULL) {
+        tempBuffer[strcspn(tempBuffer, "\n")] = '\0';
+        
+        new_note->content = (char*)malloc(strlen(tempBuffer) + 1);
+        
+        if (new_note->content != NULL) {
+            strcpy(new_note->content, tempBuffer);
+        } 
+        else {
+            printf("Memory allocation failed!\n");
+            return;
+        }
     }
 
     (*note_count)++;
@@ -80,11 +87,42 @@ void modifyNote(Note* all_notes, int note_index, int note_count, User* currentUs
     printf("Current Title: %s\n", all_notes[note_index].title);
     printf("Current Content:\n %s\n", all_notes[note_index].content);
 
-    if(fgets(all_notes[note_index].content,MAX_NOTE_CONTENT, stdin) != NULL) {
-        all_notes[note_index].content[strcspn(all_notes[note_index].content, "\n")]='\0';
+    printf("Enter new content: ");
+    char tempBuffer[MAX_NOTE_CONTENT];
+
+    if(fgets(tempBuffer, MAX_NOTE_CONTENT, stdin) != NULL) {
+        tempBuffer[strcspn(tempBuffer, "\n")] = '\0';
+        free(all_notes[note_index].content);
+
+        all_notes[note_index].content = (char*)malloc(strlen(tempBuffer) + 1);
+        strcpy(all_notes[note_index].content, tempBuffer);
+        
         printf("Note updated successfully!\n");
     }
-    else{
-        printf("Error reading input.\n");
+}
+
+void deleteNote(Note* all_notes, int note_index, int* note_count, User* currentUser){
+    if(note_index < 0 || note_index >= *note_count) {
+        printf("Invalid Note ID.\n");
+        return;
+    }
+    if(strcmp(currentUser->username, all_notes[note_index].owner) != 0){
+        printf("Error: You do not own this note.\n");
+        return;
+    }
+    free(all_notes[note_index].content);
+
+    for (int i = note_index; i < *note_count - 1; i++) {
+        all_notes[i] = all_notes[i + 1];
+    }
+    (*note_count)--;
+    printf("Note deleted successfully.\n");
+}
+
+void freeNotes(Note* all_notes, int note_count){
+    for(int i = 0; i < note_count; i++){
+        if(all_notes[i].content != NULL){
+            free(all_notes[i].content);
+        }
     }
 }
