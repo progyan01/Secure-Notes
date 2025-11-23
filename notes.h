@@ -7,7 +7,7 @@
 #define MAX_TITLE_LEN 100
 
 typedef struct{
-    char content[MAX_NOTE_CONTENT];
+    char *content;
     char title[MAX_TITLE_LEN];
     char owner[MAX_USERNAME_LEN];
 } Note;
@@ -19,5 +19,9 @@ void listNotes(Note* all_notes, int note_count, User* currentUser);
 void readNote(Note* all_notes, int note_index, int note_count, User* currentUser);
 
 void modifyNote(Note* all_notes, int note_index, int note_count, User* currentUser);
+
+void freeNotes(Note* all_notes, int note_count);
+
+void deleteNote(Note* all_notes, int note_index, int* note_count, User* currentUser);
 
 #endif
