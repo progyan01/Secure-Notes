@@ -17,6 +17,7 @@ void saveData(User* users, int u_count, Note* notes, int n_count) {
     for (int i = 0; i < n_count; i++) {
         fwrite(notes[i].title, sizeof(notes[i].title), 1, fp);
         fwrite(notes[i].owner, sizeof(notes[i].owner), 1, fp);
+        fwrite(&notes[i].created_at, sizeof(time_t), 1, fp);
         
         int len = strlen(notes[i].content) + 1; 
         fwrite(&len, sizeof(int), 1, fp);
@@ -37,6 +38,7 @@ void loadData(User* users, Note* notes, int* u_count, int* n_count) {
     for (int i = 0; i < *n_count; i++) {
         fread(notes[i].title, sizeof(notes[i].title), 1, fp);
         fread(notes[i].owner, sizeof(notes[i].owner), 1, fp);
+        fread(&notes[i].created_at, sizeof(time_t), 1, fp);
 
         int len;
         fread(&len, sizeof(int), 1, fp);
