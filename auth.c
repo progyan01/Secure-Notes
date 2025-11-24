@@ -105,6 +105,7 @@ void registerUser(User* all_users, int* user_count){
     strcpy(new_user->password,hashed_pass);
 
     (*user_count)++;
+    printf("\n");
     printf("Registration successful!\n");
 }
 
