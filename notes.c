@@ -111,24 +111,63 @@ void modifyNote(Note* all_notes, int note_index, int note_count, User* currentUs
         printf("You do not own this note.\n");
         return;
     }
-    printf("\n");
 
     //using the function to print the existing note
     readNote(all_notes, note_index, note_count, currentUser);
-    
-    printf("Enter new content: ");
+    printf("\n");
+
+    printf("Options:\n");
+    printf("1. Append (Add text to the end)\n");
+    printf("2. Overwrite (Delete old text and replace)\n");
+    printf("Choose: ");
+    int choice = 0;
+    char choice_buf[16];
+    if (fgets(choice_buf, sizeof(choice_buf), stdin)) {
+        choice = atoi(choice_buf);
+    }
+
+    printf("Enter content: ");
     char tempBuffer[MAX_NOTE_CONTENT];
 
     if(fgets(tempBuffer, MAX_NOTE_CONTENT, stdin) != NULL) {
         tempBuffer[strcspn(tempBuffer, "\n")] = '\0';
+    }
+
+    if (choice == 1){
+        // decrypting the old content into memory first
+        char *currentPlain = (char*)malloc(strlen(all_notes[note_index].content) + 1);
+        vigenere_decrypt(all_notes[note_index].content, currentUser->session_key, currentPlain);
+
+        //calculating new Size: Old + Space + New + Null
+        int newSize = strlen(currentPlain) + 1 + strlen(tempBuffer) + 1;
+        char *newFullText = (char*)malloc(newSize);
+
+        //concantenate them together
+        strcpy(newFullText, currentPlain);
+        strcat(newFullText, " ");
+        strcat(newFullText, tempBuffer);
+
+        //update the Note struct
         free(all_notes[note_index].content);
+        free(currentPlain);
+
+        all_notes[note_index].content = (char*)malloc(newSize);
+        vigenere_encrypt(newFullText, currentUser->session_key, all_notes[note_index].content);
+        
+        free(newFullText);
+        printf("Text appended successfully!\n");
+
+    } 
+    else if(choice==2){
+        free(all_notes[note_index].content);                  
+        //delete old content and then simply replace it with new
 
         all_notes[note_index].content = (char*)malloc(strlen(tempBuffer) + 1);
         vigenere_encrypt(tempBuffer, currentUser->session_key, all_notes[note_index].content);
-        //encrypt the newly modified note
-        
-        printf("Note updated successfully!\n");
+        printf("Note overwritten successfully!\n");
     }
+
+    all_notes[note_index].created_at = time(NULL);
 }
 
 void deleteNote(Note* all_notes, int note_index, int* note_count, User* currentUser){
