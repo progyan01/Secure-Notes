@@ -14,6 +14,7 @@ void createNote(Note* all_notes, int* note_count, User* currentUser){
     Note* new_note=&all_notes[*note_count];
     strcpy(new_note->owner,currentUser->username);
 
+    printf("\n");
     printf("Enter the title for this note: ");
     if(fgets(new_note->title,MAX_TITLE_LEN,stdin)!=NULL){
         new_note->title[strcspn(new_note->title,"\n")]='\0';
@@ -71,6 +72,7 @@ void readNote(Note* all_notes, int note_index, int note_count, User* currentUser
         printf("You do not own this note.\n");
         return;
     }
+    printf("\n");
 
     char *plainText=(char*)malloc(strlen(all_notes[note_index].content) + 1);
 
@@ -98,6 +100,7 @@ void modifyNote(Note* all_notes, int note_index, int note_count, User* currentUs
         printf("You do not own this note.\n");
         return;
     }
+    printf("\n");
 
     printf("Current Title: %s\n", all_notes[note_index].title);
     char *plainText = (char*)malloc(strlen(all_notes[note_index].content) + 1);
@@ -108,6 +111,7 @@ void modifyNote(Note* all_notes, int note_index, int note_count, User* currentUs
         memset(plainText, 0, strlen(plainText));
         free(plainText);
     }
+    printf("\n");
 
     printf("Enter new content: ");
     char tempBuffer[MAX_NOTE_CONTENT];
@@ -138,6 +142,7 @@ void deleteNote(Note* all_notes, int note_index, int* note_count, User* currentU
         all_notes[i] = all_notes[i + 1];
     }
     (*note_count)--;
+    printf("\n");
     printf("Note deleted successfully.\n");
 }
 
