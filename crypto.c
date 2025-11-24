@@ -1,6 +1,18 @@
+#include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 #include "crypto.h"
+
+void hash_password(const char* password, char* outputBuffer) {
+    unsigned long hash = 5381;
+    int c;
+
+    while ((c = *password++)) {
+        hash = ((hash << 5) + hash) + c; 
+    }
+
+    sprintf(outputBuffer, "%lx", hash);
+}
 
 static char encrypt_char(char plain, char key_char) {
     if (isupper(plain)) {
