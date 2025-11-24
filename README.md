@@ -17,6 +17,7 @@ Password hashing is done using DJB2 algorithm and Notes are encrypted using Vige
 * **Search:** Full-text search capability that decrypts notes on-the-fly to find keywords.
 * **Secure Persistence:** Custom binary file format (`data.dat`) handles storage of dynamic data structures.
 * **Memory Hygiene:** Sensitive data is scrubbed (`memset`) from memory immediately after use to prevent RAM scraping.
+* **Robust Error Catching:** Every function has error catching statements so that the user knows why the program failed to do something.
 
 ##  Installation & Usage
 
