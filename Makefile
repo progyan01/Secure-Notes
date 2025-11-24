@@ -1,4 +1,4 @@
-TARGET = notes_app
+TARGET = notes
 
 OBJS = main.o auth.o notes.o crypto.o file_io.o
 
