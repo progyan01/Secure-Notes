@@ -8,6 +8,7 @@
 typedef struct{
     char username[MAX_USERNAME_LEN];
     char password[MAX_PASSWORD_LEN];
+    char session_key[MAX_PASSWORD_LEN];
 } User;
 
 void registerUser(User*, int*);
