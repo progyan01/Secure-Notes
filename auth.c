@@ -4,6 +4,7 @@
 #include <string.h>
 #include <ctype.h>
 
+//checks if the password is strong enough or not
 static int passwordValidity(const char* password){
     int length=strlen(password);
     int has_upper = 0;
@@ -40,6 +41,7 @@ static int passwordValidity(const char* password){
     return 5;
 }
 
+//to prevent writing the same code in two different places
 static int getCredentials(char* username, char* password){
     printf("Enter your username: ");
     if(fgets(username, MAX_USERNAME_LEN, stdin)!=NULL){
@@ -66,10 +68,12 @@ void registerUser(User* all_users, int* user_count){
     char new_username[MAX_USERNAME_LEN];
     char new_password[MAX_PASSWORD_LEN];
 
+    //error catching if there was a problem in inputting username or password
     if (getCredentials(new_username,new_password)==0){
         return;
     }
 
+    //check if the username is available or not
     for(int i=0;i<*user_count;i++){
         if(strcmp(new_username,all_users[i].username)==0){
             printf("Username already taken.\n");
@@ -77,6 +81,7 @@ void registerUser(User* all_users, int* user_count){
         }
     }
 
+    //check problem with password
     int validity=passwordValidity(new_password);
     switch(validity){
         case 1:{
@@ -97,6 +102,7 @@ void registerUser(User* all_users, int* user_count){
         }
     }
 
+    //storing only the hash of the password
     char hashed_pass[MAX_PASSWORD_LEN];
     hash_password(new_password,hashed_pass);
 
@@ -118,6 +124,7 @@ User* loginUser(User* all_users, int user_count){
     char hashed_pass[MAX_PASSWORD_LEN];
     hash_password(password,hashed_pass);
 
+    //checking if the username exists or not and then matching the hash of the password and copying the password entered by user in plaintext into the session key that's only stored in RAM
     for(int i=0;i<user_count;i++){
         if(strcmp(username,all_users[i].username)==0){
             if(strcmp(hashed_pass,all_users[i].password)==0){
