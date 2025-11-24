@@ -5,7 +5,6 @@
 #include "notes.h"
 #include "file_io.h"
 
-// Helper to safely get a number from user
 int getIntInput() {
     char buffer[16];
     if (fgets(buffer, sizeof(buffer), stdin)) {
@@ -15,21 +14,18 @@ int getIntInput() {
 }
 
 int main(void) {
-    // 1. Setup Memory
     User users[MAX_USERS];
     Note notes[MAX_NOTES];
     int u_count = 0;
     int n_count = 0;
 
-    // 2. Load existing data
     loadData(users, notes, &u_count, &n_count);
 
     User *currentUser = NULL;
-    char query_buff[100]; // Buffer for search queries
+    char query_buff[100];
 
     while (1) {
         if (currentUser == NULL) {
-            // === GUEST MENU (Safe Mode) ===
             printf("\n--- SECURE NOTES APP (v1.0) ---\n");
             printf("1) Register\n");
             printf("2) Login\n");
@@ -47,7 +43,7 @@ int main(void) {
                 }
             } else if (choice == 3) {
                 saveData(users, u_count, notes, n_count);
-                freeNotes(notes, n_count); // <--- CRITICAL: Clean up RAM
+                freeNotes(notes, n_count);
                 printf("Data saved. Exiting.\n");
                 break;
             } else {
@@ -55,7 +51,6 @@ int main(void) {
             }
         } 
         else {
-            // === USER MENU (Logged In) ===
             printf("\n--- %s's Dashboard ---\n", currentUser->username);
             printf("1) Create Note\n");
             printf("2) View All Notes\n");
