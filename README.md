@@ -8,7 +8,8 @@
 Secure-Notes is a multi-user system designed to store sensitive text data or just personal notes. Unlike standard text files, data stored by this application is fully encrypted on the disk.
 * **Authentication:** Passwords are **hashed** (one-way) before storage, so they cannot be reverse-engineered even if the data file is stolen.
 * **Privacy:** Notes are encrypted using a **Session Key** derived from the user's login. This key exists *only in RAM* and is never written to the hard drive.
-
+  
+Password hashing is done using DJB2 algorithm and Notes are encrypted using Vigenere cipher.
 ##  Key Features
 * **User System:** Secure Registration and Login with credential validation.
 * **Dynamic Storage:** Notes use dynamic memory allocation (`malloc`), allowing efficient storage of messages of varying lengths.
