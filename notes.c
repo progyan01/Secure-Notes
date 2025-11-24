@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "notes.h"
 #include "auth.h"
 #include "crypto.h"
@@ -30,7 +31,7 @@ void createNote(Note* all_notes, int* note_count, User* currentUser){
         new_note->content = (char*)malloc(strlen(tempBuffer) + 1);
         
         if(new_note->content != NULL){
-            vigenere_encrypt(tempBuffer, currentUser->password, new_note->content);
+            vigenere_encrypt(tempBuffer, currentUser->session_key, new_note->content);
 
             new_note->created_at = time(NULL);
             (*note_count)++;
@@ -74,7 +75,7 @@ void readNote(Note* all_notes, int note_index, int note_count, User* currentUser
     char *plainText=(char*)malloc(strlen(all_notes[note_index].content) + 1);
 
     if(plainText){
-        vigenere_decrypt(all_notes[note_index].content, currentUser->password, plainText);
+        vigenere_decrypt(all_notes[note_index].content, currentUser->session_key, plainText);
         
         printf("----- %s -----\n", all_notes[note_index].title);
         printf("%s\n", plainText);
@@ -101,7 +102,7 @@ void modifyNote(Note* all_notes, int note_index, int note_count, User* currentUs
     printf("Current Title: %s\n", all_notes[note_index].title);
     char *plainText = (char*)malloc(strlen(all_notes[note_index].content) + 1);
     if(plainText){
-        vigenere_decrypt(all_notes[note_index].content, currentUser->password, plainText);
+        vigenere_decrypt(all_notes[note_index].content, currentUser->session_key, plainText);
         printf("Current Content: %s\n", plainText);
 
         memset(plainText, 0, strlen(plainText));
@@ -116,7 +117,7 @@ void modifyNote(Note* all_notes, int note_index, int note_count, User* currentUs
         free(all_notes[note_index].content);
 
         all_notes[note_index].content = (char*)malloc(strlen(tempBuffer) + 1);
-        vigenere_encrypt(tempBuffer, currentUser->password, all_notes[note_index].content);
+        vigenere_encrypt(tempBuffer, currentUser->session_key, all_notes[note_index].content);
         
         printf("Note updated successfully!\n");
     }
@@ -149,7 +150,7 @@ void searchNotes(Note* all_notes, int note_count, User* currentUser, char* query
 
         char *plainText = (char*)malloc(strlen(all_notes[i].content) + 1);
         if(plainText){
-            vigenere_decrypt(all_notes[i].content, currentUser->password, plainText);
+            vigenere_decrypt(all_notes[i].content, currentUser->session_key, plainText);
 
             if (strstr(all_notes[i].title, query) != NULL || 
                 strstr(plainText, query) != NULL) {
