@@ -36,7 +36,9 @@ void createNote(Note* all_notes, int* note_count, User* currentUser){
 
             new_note->created_at = time(NULL);
             (*note_count)++;
+            printf("\n");
             printf("Note created successfully!");
+            printf("\n");
         } 
         else{
             printf("Memory allocation failed!\n");
