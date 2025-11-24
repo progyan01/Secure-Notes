@@ -11,7 +11,12 @@ void saveData(User* users, int u_count, Note* notes, int n_count) {
     }
 
     fwrite(&u_count, sizeof(int), 1, fp);
-    fwrite(users, sizeof(User), u_count, fp);
+    
+    for (int i = 0; i < u_count; i++) {
+        fwrite(users[i].username, sizeof(users[i].username), 1, fp);
+        fwrite(users[i].password, sizeof(users[i].password), 1, fp);
+    }
+
     fwrite(&n_count, sizeof(int), 1, fp);
 
     for (int i = 0; i < n_count; i++) {
@@ -32,7 +37,12 @@ void loadData(User* users, Note* notes, int* u_count, int* n_count) {
     if (!fp) return; 
 
     fread(u_count, sizeof(int), 1, fp);
-    fread(users, sizeof(User), *u_count, fp);
+
+    for (int i = 0; i < *u_count; i++) {
+        fread(users[i].username, sizeof(users[i].username), 1, fp);
+        fread(users[i].password, sizeof(users[i].password), 1, fp);
+        memset(users[i].session_key, 0, MAX_PASSWORD_LEN);
+    }
 
     fread(n_count, sizeof(int), 1, fp);
     for (int i = 0; i < *n_count; i++) {
