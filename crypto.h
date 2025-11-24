@@ -4,6 +4,6 @@
 
 void vigenere_encrypt(const char* plaintext, char* key, char* ciphertext);
 void vigenere_decrypt(const char* ciphertext, char* key, char* plaintext);
-void hash_password(const char* password, char* outputBuffer)
+void hash_password(const char* password, char* outputBuffer);
 
 #endif
