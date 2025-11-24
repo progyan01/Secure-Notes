@@ -97,7 +97,7 @@ void registerUser(User* all_users, int* user_count){
         }
     }
 
-    char *hashed_pass[MAX_PASSWORD_LEN];
+    char hashed_pass[MAX_PASSWORD_LEN];
     hash_password(new_password,hashed_pass);
 
     User* new_user=&all_users[*user_count];
@@ -114,7 +114,7 @@ User* loginUser(User* all_users, int user_count){
 
     getCredentials(username,password);
 
-    char *hashed_pass[MAX_PASSWORD_LEN];
+    char hashed_pass[MAX_PASSWORD_LEN];
     hash_password(password,hashed_pass);
 
     for(int i=0;i<user_count;i++){
