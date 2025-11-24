@@ -14,21 +14,29 @@ void hash_password(const char* password, char* outputBuffer) {
     sprintf(outputBuffer, "%lx", hash);
 }
 
+static int get_shift(char key_char) {
+    return ((unsigned char)key_char) % 26;
+}
+
 static char encrypt_char(char plain, char key_char) {
+    int shift = get_shift(key_char);
+
     if (isupper(plain)) {
-        return ((plain - 'A') + (toupper(key_char) - 'A')) % 26 + 'A';
+        return ((plain - 'A') + shift) % 26 + 'A';
     }
     if (islower(plain)) {
-        return ((plain - 'a') + (tolower(key_char) - 'a')) % 26 + 'a';
+        return ((plain - 'a') + shift) % 26 + 'a';
     }
     return plain;
 }
 static char decrypt_char(char cipher, char key_char) {
+    int shift = get_shift(key_char);
+
     if (isupper(cipher)) {
-        return ((cipher - 'A') - (toupper(key_char) - 'A') + 26) % 26 + 'A';
+        return ((cipher - 'A') - shift + 26) % 26 + 'A';
     }
     if (islower(cipher)) {
-        return ((cipher - 'a') - (tolower(key_char) - 'a') + 26) % 26 + 'a';
+        return ((cipher - 'a') - shift + 26) % 26 + 'a';
     }
     return cipher;
 }
