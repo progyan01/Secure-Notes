@@ -120,6 +120,7 @@ User* loginUser(User* all_users, int user_count){
     for(int i=0;i<user_count;i++){
         if(strcmp(username,all_users[i].username)==0){
             if(strcmp(encrypted_pass,all_users[i].password)==0){
+                strcpy(all_users[i].session_key, password);
                 return &all_users[i];
             }
         }
