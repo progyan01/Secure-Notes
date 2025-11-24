@@ -26,7 +26,7 @@ int main(void) {
 
     while (1) {
         if (currentUser == NULL) {
-            printf("\n--- SECURE NOTES APP (v1.0) ---\n");
+            printf("\n--- SECURE NOTES APP ---\n");
             printf("1) Register\n");
             printf("2) Login\n");
             printf("3) Save & Exit\n");
